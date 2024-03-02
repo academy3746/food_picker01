@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:food_picker/screens/main_screen/main_screen.dart';
 import 'package:food_picker/screens/splash_screen/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const FoodApp());
 }
 
