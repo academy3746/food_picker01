@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
-import 'package:food_picker/common/widgets/section_text.dart';
+import 'package:food_picker/common/widgets/common_text.dart';
 import 'package:food_picker/screens/main_screen/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 height: Sizes.size150 + Sizes.size30,
               ),
               Gaps.v32,
-              const SectionText(
+              const CommonText(
                 textContent: '푸드피커',
                 textColor: Colors.black,
                 textSize: Sizes.size36,

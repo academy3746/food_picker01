@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SectionText extends StatelessWidget {
-  const SectionText({
+class CommonText extends StatelessWidget {
+  const CommonText({
     super.key,
     required this.textContent,
     this.textSize,

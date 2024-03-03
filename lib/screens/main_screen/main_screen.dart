@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/widgets/back_handler_button.dart';
-import 'package:food_picker/common/widgets/section_text.dart';
+import 'package:food_picker/common/widgets/common_button.dart';
+import 'package:food_picker/common/widgets/common_text.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -65,11 +66,22 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           ),
         ),
         body: Center(
-          child: SectionText(
-            textContent: 'DEMO APP',
-            textColor: Colors.grey.shade400,
-            textSize: Sizes.size20,
-            textWeight: FontWeight.w700,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CommonText(
+                textContent: 'DEMO APP',
+                textColor: Colors.grey.shade400,
+                textSize: Sizes.size20,
+                textWeight: FontWeight.w700,
+              ),
+              CommonButton(
+                btnText: 'TEST BUTTON',
+                btnAction: () => print('Button onPressed!'),
+                btnBackgroundColor: Colors.black,
+                textColor: Colors.white,
+              ),
+            ],
           ),
         ),
       ),
