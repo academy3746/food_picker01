@@ -13,7 +13,7 @@ class AppSnackbar {
   void showSnackbar(BuildContext context) {
     var snackBar = SnackBar(
       content: Text(msg),
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
