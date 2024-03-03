@@ -1,7 +1,9 @@
 // ignore_for_file: avoid_print, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/widgets/back_handler_button.dart';
+import 'package:food_picker/common/widgets/section_text.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -12,7 +14,7 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver{
+class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   /// 뒤로가기 처리
   BackHandlerButton? backHandlerButton;
 
@@ -58,12 +60,17 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver{
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           title: const Text(
-            'DEMO APP',
+            'TEST VERSION',
             style: TextStyle(color: Colors.white),
           ),
         ),
-        body: const Center(
-          child: Text('DEMO APP'),
+        body: Center(
+          child: SectionText(
+            textContent: 'DEMO APP',
+            textColor: Colors.grey.shade400,
+            textSize: Sizes.size20,
+            textWeight: FontWeight.w700,
+          ),
         ),
       ),
     );

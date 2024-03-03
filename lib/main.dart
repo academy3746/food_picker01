@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_picker/screens/login_screen/login_screen.dart';
 import 'package:food_picker/screens/main_screen/main_screen.dart';
 import 'package:food_picker/screens/splash_screen/splash_screen.dart';
 
@@ -16,7 +17,10 @@ class FoodApp extends StatelessWidget {
     return MaterialApp(
       title: 'Food Picker',
       theme: ThemeData(
-        primaryColor: const Color(0xFF7E57C2),
+        primaryColor: const Color(0xFF82B1FF),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF82B1FF),
+        ),
         useMaterial3: true,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -24,6 +28,7 @@ class FoodApp extends StatelessWidget {
       initialRoute: SplashScreen.routeName,
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),
+        LoginScreen.routeName: (context) => const LoginScreen(),
         MainScreen.routeName: (context) => const MainScreen(),
       },
     );
