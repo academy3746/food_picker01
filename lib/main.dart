@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_picker/screens/auth_screen/sign_up_screen.dart';
+import 'package:food_picker/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
 import 'package:food_picker/screens/main_screen/main_screen.dart';
 import 'package:food_picker/screens/splash_screen/splash_screen.dart';
 import 'screens/auth_screen/login_screen/login_screen.dart';
