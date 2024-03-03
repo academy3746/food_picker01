@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/widgets/back_handler_button.dart';
+import 'package:food_picker/common/widgets/common_app_bar.dart';
 import 'package:food_picker/common/widgets/common_button.dart';
 import 'package:food_picker/common/widgets/common_text.dart';
 
@@ -58,12 +59,9 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          title: const Text(
-            'TEST VERSION',
-            style: TextStyle(color: Colors.white),
-          ),
+        appBar: const CommonAppBar(
+          title: 'IS TESTING',
+          isLeading: false,
         ),
         body: Center(
           child: Column(
