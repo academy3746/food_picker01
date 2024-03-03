@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_print, deprecated_member_use
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/widgets/back_handler_button.dart';
