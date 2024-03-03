@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 textContent: '푸드피커',
                 textColor: Colors.black,
                 textSize: Sizes.size36,
-                textWeight: FontWeight.w700,
+                textWeight: FontWeight.bold,
               ),
             ],
           ),
