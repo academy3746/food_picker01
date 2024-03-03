@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_picker/screens/login_screen/login_screen.dart';
 import 'package:food_picker/screens/main_screen/main_screen.dart';
 import 'package:food_picker/screens/splash_screen/splash_screen.dart';
+
+import 'screens/auth_screen/login_screen/login_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
