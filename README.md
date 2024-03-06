@@ -10,6 +10,7 @@
 - In App 사진 촬영 및 갤러리 접근: Image Picker
 
 # External Plugin List
+
 1. cupertino_icons: ^1.0.6
 2. fluttertoast: ^8.2.4
 3. supabase_flutter: ^2.3.4
