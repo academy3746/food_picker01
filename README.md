@@ -1,16 +1,21 @@
-# food_picker
+# Introduction (작업중)
 
-Supabse Practice 001
+<h3>맛집을 가르쳐 주겠다, 푸드피커 (토이 프로젝트)</h3>
+1. Service Scope: Android / IOS
+2. Application Developing Tool: Flutter / Android Studio / X Code
+3. Server Configuration: Supabse (RDBMS)
+4. Native App Performance
 
-## Getting Started
+- In App 사진 촬영 및 갤러리 접근: Image Picker
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# External Plugin List
+1. cupertino_icons: ^1.0.6
+2. fluttertoast: ^8.2.4
+3. supabase_flutter: ^2.3.4
+4. image_picker: ^1.0.7
+5. flutter_naver_map: ^1.2.1
+6. geolocator: ^11.0.0
+7. http: ^1.2.1
+8. daum_postcode_search: ^0.0.2
+9. intl: ^0.19.0
+10. flutter_inappwebview: ^5.8.0
