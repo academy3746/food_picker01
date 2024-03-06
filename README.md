@@ -1,6 +1,7 @@
 # Introduction (작업중)
 
 <h3>맛집을 가르쳐 주겠다, 푸드피커 (토이 프로젝트)</h3>
+
 1. Service Scope: Android / IOS
 2. Application Developing Tool: Flutter / Android Studio / X Code
 3. Server Configuration: Supabse (RDBMS)
