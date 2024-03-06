@@ -1,11 +1,9 @@
 // ignore_for_file: avoid_print, deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/widgets/back_handler_button.dart';
 import 'package:food_picker/common/widgets/common_app_bar.dart';
-import 'package:food_picker/common/widgets/common_button.dart';
 import 'package:food_picker/common/widgets/common_text.dart';
 
 class MainScreen extends StatefulWidget {
@@ -73,13 +71,6 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                 textColor: Colors.grey.shade400,
                 textSize: Sizes.size20,
                 textWeight: FontWeight.w700,
-              ),
-              Gaps.v48,
-              CommonButton(
-                btnText: 'TEST BUTTON',
-                btnAction: () => print('Button onPressed!'),
-                btnBackgroundColor: Colors.black,
-                textColor: Colors.white,
               ),
             ],
           ),
