@@ -133,6 +133,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _keyboardDismiss() {
     FocusScope.of(context).unfocus();
   }
+  
+  /// 닉네임 검증
+  dynamic _nameValidation(value) {
+    if (value.isEmpty) {
+      return '닉네임을 입력해 주세요!';
+    }
+
+    return null;
+  }
+  
+  /// 이메일 검증
+  dynamic _emailValidation(value) {
+    if (value.isEmpty) {
+      return '이메일을 입력해 주세요!';
+    }
+
+    return null;
+  }
+  
+  /// 패스워드 검증
+  dynamic _pwdValidation(value) {
+    if (value.isEmpty) {
+      return '패스워드를 입력해 주세요!';
+    }
+
+    return null;
+  }
+  
+  /// 패스워드 확인 검증
+  dynamic _confirmValidation(value) {
+    if (value.isEmpty) {
+      return '패스워드 재확인 필드를 입력해 주세요!';
+    }
+
+    return null;
+  }
+  
+  /// 자기소개 검증 (?)
+  dynamic _introValidation(value) {
+    if (value.isEmpty) {
+      return '자기소개를 입력해 주세요!';
+    }
+
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +228,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         hintText: '닉네임을 입력해 주세요',
                         obscureText: false,
                         maxLines: 1,
+                        maxLength: 10,
+                        validator: (value) => _nameValidation(value),
                       ),
                     ],
                   ),
@@ -210,6 +257,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         hintText: '이메일 주소를 입력해 주세요',
                         obscureText: false,
                         maxLines: 1,
+                        maxLength: 50,
+                        validator: (value) => _emailValidation(value),
                       ),
                     ],
                   ),
@@ -237,6 +286,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         hintText: '패스워드를 8글자 이상 입력해 주세요',
                         obscureText: true,
                         maxLines: 1,
+                        maxLength: 25,
+                        validator: (value) => _pwdValidation(value),
                       ),
                     ],
                   ),
@@ -264,6 +315,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         hintText: '패스워드를 다시 한 번 입력해 주세요',
                         obscureText: true,
                         maxLines: 1,
+                        maxLength: 25,
+                        validator: (value) => _confirmValidation(value),
                       ),
                     ],
                   ),
@@ -291,6 +344,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         maxLines: 5,
                         maxLength: 500,
                         obscureText: false,
+                        validator: (value) => _introValidation(value),
                       ),
                     ],
                   ),

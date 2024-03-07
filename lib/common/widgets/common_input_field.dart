@@ -16,7 +16,7 @@ class InputField extends StatefulWidget {
     this.initialValue,
     required this.maxLines,
     this.maxLength,
-    this.validator,
+    required this.validator,
   });
 
   final TextEditingController controller;
@@ -43,7 +43,7 @@ class InputField extends StatefulWidget {
 
   final int? maxLength;
 
-  final FormFieldValidator? validator;
+  final FormFieldValidator validator;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -53,10 +53,7 @@ class _InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(
-        top: Sizes.size10,
-        bottom: Sizes.size16,
-      ),
+      margin: const EdgeInsets.only(top: Sizes.size10),
       child: TextFormField(
         decoration: InputDecoration(
           hintText: widget.hintText,
@@ -94,13 +91,13 @@ class _InputFieldState extends State<InputField> {
         textInputAction: widget.textInputAction,
         enabled: widget.enabled,
         readOnly: widget.readOnly,
-        onTap: widget.onTap,
+        onTap: widget.readOnly ? widget.onTap : null,
         onFieldSubmitted: widget.onFieldSubmitted,
         obscureText: widget.obscureText,
         initialValue: widget.initialValue,
         maxLines: widget.maxLines,
         maxLength: widget.maxLength,
-        validator: widget.validator,
+        validator: (value) => widget.validator(value),
       ),
     );
   }
