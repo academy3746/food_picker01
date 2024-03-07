@@ -25,8 +25,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return SizedBox(
+        return Container(
           width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(
+            top: Sizes.size10,
+            bottom: Sizes.size10,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -45,8 +49,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () {
-                  print('갤러리에서 사진 선택!');
+                onPressed: () async {
+                  Navigator.pop(context);
+
+                  await _getGalleryImage();
                 },
                 child: const Text(
                   '갤러리',
@@ -79,6 +85,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> _takePhoto() async {
     var image = await ImagePicker().pickImage(
       source: ImageSource.camera,
+      imageQuality: 10,
+    );
+
+    if (image != null) {
+      setState(() {
+        _profileImg = File(image.path);
+      });
+    }
+  }
+
+  /// 갤러리에서 사진 선택
+  Future<void> _getGalleryImage() async {
+    var image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 10,
     );
 
     if (image != null) {
