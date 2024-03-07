@@ -2,8 +2,11 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/widgets/common_app_bar.dart';
+import 'package:food_picker/common/widgets/common_input_field.dart';
+import 'package:food_picker/common/widgets/common_text.dart';
 import 'package:food_picker/screens/auth_screen/sign_up_screen/widgets/profile.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -18,7 +21,15 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   /// 프로필 이미지 객체 생성
-  File? _profileImg;
+  File? profileImg;
+
+  /// Input Field Controller 객체 생성
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _pwdController = TextEditingController();
+  final TextEditingController _confirmController = TextEditingController();
+  final TextEditingController _introController = TextEditingController();
+
 
   /// 프로필 등록 Bottom Sheet Dialog
   Future<void> _showProfileUpload() async {
@@ -92,7 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     if (image != null) {
       setState(() {
-        _profileImg = File(image.path);
+        profileImg = File(image.path);
       });
     }
   }
@@ -106,7 +117,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     if (image != null) {
       setState(() {
-        _profileImg = File(image.path);
+        profileImg = File(image.path);
       });
     }
   }
@@ -114,8 +125,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   /// 프로필 삭제
   Future<void> _deleteImage() async {
     setState(() {
-      _profileImg = null;
+      profileImg = null;
     });
+  }
+
+  /// 소프트 키보드 비활성화
+  void _keyboardDismiss() {
+    FocusScope.of(context).unfocus();
   }
 
   @override
@@ -126,17 +142,163 @@ class _SignUpScreenState extends State<SignUpScreen> {
         title: '푸드피커 가입하기',
         isLeading: true,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          /// profile_img
-          GestureDetector(
-            onTap: () {
-              _showProfileUpload();
-            },
-            child: BuildProfile(profileImg: _profileImg),
+      body: GestureDetector(
+        onTap: _keyboardDismiss,
+        child: Container(
+          margin: const EdgeInsets.all(Sizes.size20),
+          child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// Profile IMG
+                GestureDetector(
+                  onTap: () {
+                    _showProfileUpload();
+                  },
+                  child: BuildProfile(profileImg: profileImg),
+                ),
+                Gaps.v32,
+
+                /// Nickname
+                Container(
+                  margin: const EdgeInsets.only(top: Sizes.size16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonText(
+                        textContent: '닉네임',
+                        textSize: Sizes.size20,
+                        textColor: Colors.grey.shade500,
+                        textWeight: FontWeight.w700,
+                      ),
+                      InputField(
+                        controller: _nameController,
+                        keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.next,
+                        enabled: true,
+                        readOnly: false,
+                        onTap: null,
+                        hintText: '닉네임을 입력해 주세요',
+                        obscureText: false,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
+                ),
+
+                /// E-mail Addr.
+                Container(
+                  margin: const EdgeInsets.only(top: Sizes.size16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonText(
+                        textContent: '이메일',
+                        textSize: Sizes.size20,
+                        textColor: Colors.grey.shade500,
+                        textWeight: FontWeight.w700,
+                      ),
+                      InputField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        enabled: true,
+                        readOnly: false,
+                        onTap: null,
+                        hintText: '이메일 주소를 입력해 주세요',
+                        obscureText: false,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
+                ),
+
+                /// Password
+                Container(
+                  margin: const EdgeInsets.only(top: Sizes.size16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonText(
+                        textContent: '패스워드',
+                        textSize: Sizes.size20,
+                        textColor: Colors.grey.shade500,
+                        textWeight: FontWeight.w700,
+                      ),
+                      InputField(
+                        controller: _pwdController,
+                        keyboardType: TextInputType.visiblePassword,
+                        textInputAction: TextInputAction.next,
+                        enabled: true,
+                        readOnly: false,
+                        onTap: null,
+                        hintText: '패스워드를 8글자 이상 입력해 주세요',
+                        obscureText: true,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
+                ),
+
+                /// Confirm PWD
+                Container(
+                  margin: const EdgeInsets.only(top: Sizes.size16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonText(
+                        textContent: '패스워드 확인',
+                        textSize: Sizes.size20,
+                        textColor: Colors.grey.shade500,
+                        textWeight: FontWeight.w700,
+                      ),
+                      InputField(
+                        controller: _confirmController,
+                        keyboardType: TextInputType.visiblePassword,
+                        textInputAction: TextInputAction.next,
+                        enabled: true,
+                        readOnly: false,
+                        onTap: null,
+                        hintText: '패스워드를 다시 한 번 입력해 주세요',
+                        obscureText: true,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
+                ),
+
+                /// Introduce
+                Container(
+                  margin: const EdgeInsets.only(top: Sizes.size16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonText(
+                        textContent: '자기소개',
+                        textSize: Sizes.size20,
+                        textColor: Colors.grey.shade500,
+                        textWeight: FontWeight.w700,
+                      ),
+                      InputField(
+                        controller: _introController,
+                        textInputAction: TextInputAction.newline,
+                        enabled: true,
+                        readOnly: false,
+                        onTap: null,
+                        hintText: '멋진 자기소개를 입력해 볼까요?',
+                        maxLines: 5,
+                        maxLength: 500,
+                        obscureText: false,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }

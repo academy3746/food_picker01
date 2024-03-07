@@ -25,7 +25,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: Sizes.size48,
       automaticallyImplyLeading: isLeading,
       titleSpacing: isLeading ? 0 : Sizes.size16,
-      scrolledUnderElevation: 3,
+      scrolledUnderElevation: 0,
       elevation: 0,
       leading: isLeading
           ? GestureDetector(
