@@ -31,7 +31,7 @@ class InputField extends StatefulWidget {
 
   final Function()? onTap;
 
-  final Function(String)? onFieldSubmitted;
+  final Function(String value)? onFieldSubmitted;
 
   final String? hintText;
 
