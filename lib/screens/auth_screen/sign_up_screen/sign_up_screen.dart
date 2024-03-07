@@ -63,8 +63,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () {
-                  print('프로필 이미지 삭제!');
+                onPressed: () async {
+                  Navigator.pop(context);
+
+                  await _deleteImage();
                 },
                 child: const Text(
                   '프로필 삭제',
@@ -107,6 +109,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _profileImg = File(image.path);
       });
     }
+  }
+
+  /// 프로필 삭제
+  Future<void> _deleteImage() async {
+    setState(() {
+      _profileImg = null;
+    });
   }
 
   @override
