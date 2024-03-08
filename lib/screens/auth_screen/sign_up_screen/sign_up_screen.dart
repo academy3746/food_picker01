@@ -4,12 +4,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
+import 'package:food_picker/common/widgets/app_snackbar.dart';
 import 'package:food_picker/common/widgets/common_app_bar.dart';
 import 'package:food_picker/common/widgets/common_button.dart';
 import 'package:food_picker/common/widgets/common_input_field.dart';
 import 'package:food_picker/common/widgets/common_text.dart';
+import 'package:food_picker/data/model/member.dart';
 import 'package:food_picker/screens/auth_screen/sign_up_screen/widgets/profile.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -24,6 +27,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   /// 프로필 이미지 객체 생성
   File? profileImg;
 
+  /// 프로필 이미지 주소
+  String? imageUrl;
+
   /// Input Field Controller 객체 생성
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -33,6 +39,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   /// Validate Text Input Field
   final _formKey = GlobalKey<FormState>();
+
+  /// Initialize Supabase Console
+  final _supabase = Supabase.instance.client;
 
   /// 프로필 등록 Bottom Sheet Dialog
   Future<void> _showProfileUpload() async {
@@ -136,7 +145,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _keyboardDismiss() {
     FocusScope.of(context).unfocus();
   }
-  
+
   /// 닉네임 검증
   dynamic _nameValidation(value) {
     if (value.isEmpty) {
@@ -145,7 +154,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return null;
   }
-  
+
   /// 이메일 검증
   dynamic _emailValidation(value) {
     if (value.isEmpty) {
@@ -154,7 +163,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return null;
   }
-  
+
   /// 패스워드 검증
   dynamic _pwdValidation(value) {
     if (value.isEmpty) {
@@ -163,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return null;
   }
-  
+
   /// 패스워드 확인 검증
   dynamic _confirmValidation(value) {
     if (value.isEmpty) {
@@ -172,7 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return null;
   }
-  
+
   /// 자기소개 검증 (?)
   dynamic _introValidation(value) {
     if (value.isEmpty) {
@@ -180,6 +189,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     return null;
+  }
+
+  /// 테이블에 회원 정보 등록
+  Future<bool> _registerAccount(String emailValue, String pwdValue) async {
+    var success = false;
+
+    final AuthResponse response = await _supabase.auth.signUp(
+      email: emailValue,
+      password: pwdValue,
+    );
+
+    if (response.user != null) {
+      success = true;
+
+      if (profileImg != null) {
+        var now = DateTime.now();
+
+        var path = 'profiles/${response.user!.id}_$now.jpg';
+
+        final imgFile = profileImg;
+
+        await _supabase.storage.from('food_pick').upload(
+              path,
+              imgFile!,
+              fileOptions: const FileOptions(upsert: true),
+            );
+
+        imageUrl = _supabase.storage.from('food_pick').getPublicUrl(path);
+      }
+
+      // 2. INSERT Database
+      await _supabase.from('member').insert(
+            MemberModel(
+              name: _nameController.text,
+              email: emailValue,
+              introduce: _introController.text,
+              uid: response.user!.id,
+              profileUrl: imageUrl,
+            ).toMap(),
+          );
+    } else {
+      success = false;
+    }
+
+    return success;
   }
 
   @override
@@ -364,8 +418,42 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       btnBackgroundColor: Colors.black,
                       btnText: '가입 완료',
                       textColor: Colors.white,
-                      btnAction: () {
-                        Navigator.of(context).pop();
+                      btnAction: () async {
+                        // 가입 완료 → 호출 변수
+                        var emailValue = _emailController.text;
+                        var pwdValue = _pwdController.text;
+
+                        // Check Validation
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
+
+                        // CRUD on Supabase Server
+                        bool success = await _registerAccount(
+                          emailValue,
+                          pwdValue,
+                        );
+
+                        var msg = success
+                            ? '회원 가입이 완료되었습니다!'
+                            : '회원 가입이 정상적으로 처리 되지 않았습니다!';
+
+                        if (!context.mounted) return;
+
+                        var snackBar = AppSnackbar(
+                          context: context,
+                          msg: msg,
+                        );
+
+                        if (!success) {
+                          snackBar.showSnackbar(context);
+
+                          return;
+                        } else {
+                          snackBar.showSnackbar(context);
+
+                          Navigator.pop(context);
+                        }
                       },
                     ),
                   ),
