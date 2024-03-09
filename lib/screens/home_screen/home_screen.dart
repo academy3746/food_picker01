@@ -16,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   /// 지도 객체 생성
   late NaverMapController mapController;
+
+  /// 중심 좌표 전환 관련 Completer 객체 생성
   Completer<NaverMapController> mapCompleter = Completer();
 
   /// 위치 정보 획득
