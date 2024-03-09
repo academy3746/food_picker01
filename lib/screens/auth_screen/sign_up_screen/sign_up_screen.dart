@@ -434,9 +434,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           pwdValue,
                         );
 
-                        var msg = success
-                            ? '회원 가입이 완료되었습니다!'
-                            : '회원 가입이 정상적으로 처리 되지 않았습니다!';
+                        var msg = '회원 가입이 정상적으로 처리 되지 않았습니다!';
 
                         if (!context.mounted) return;
 
@@ -450,8 +448,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                           return;
                         } else {
-                          snackBar.showSnackbar(context);
-
                           Navigator.pop(context);
                         }
                       },

@@ -3,11 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
+import 'package:food_picker/common/widgets/app_snackbar.dart';
 import 'package:food_picker/common/widgets/back_handler_button.dart';
 import 'package:food_picker/common/widgets/common_button.dart';
 import 'package:food_picker/common/widgets/common_input_field.dart';
 import 'package:food_picker/common/widgets/common_text.dart';
 import 'package:food_picker/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
+import 'package:food_picker/screens/main_screen/main_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,6 +25,12 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   /// Text InputField Controller 객체 생성
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
+
+  /// Validate Text Input Field
+  final _formKey = GlobalKey<FormState>();
+
+  /// Initialize Supabase Console
+  final _supabase = Supabase.instance.client;
 
   /// 뒤로가기 처리
   BackHandlerButton? backHandlerButton;
@@ -47,6 +56,24 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   /// 소프트 키보드 비활성화
   void _keyboardDismiss() {
     FocusScope.of(context).unfocus();
+  }
+
+  /// Login with Email Address on Supabase Server
+  Future<bool> _loginWithEmail(String emailValue, String pwdValue) async {
+    var success = false;
+
+    final AuthResponse response = await _supabase.auth.signInWithPassword(
+      email: emailValue,
+      password: pwdValue,
+    );
+
+    if (response.user != null) {
+      success = true;
+    } else {
+      success = false;
+    }
+
+    return success;
   }
 
   @override
@@ -78,123 +105,157 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (backHandlerButton != null) {
-          return backHandlerButton!.onWillPop();
-        }
+    return GestureDetector(
+      onTap: _keyboardDismiss,
+      child: WillPopScope(
+        onWillPop: () async {
+          if (backHandlerButton != null) {
+            return backHandlerButton!.onWillPop();
+          }
 
-        return Future.value(false);
-      },
-      child: GestureDetector(
-        onTap: _keyboardDismiss,
+          return Future.value(false);
+        },
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
             scrollDirection: Axis.vertical,
-            child: Container(
-              margin: const EdgeInsets.all(Sizes.size24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Gaps.v120,
-                  const Center(
-                    child: Text(
-                      '푸드피커',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: Sizes.size52,
-                        fontWeight: FontWeight.w700,
+            child: Form(
+              key: _formKey,
+              child: Container(
+                margin: const EdgeInsets.all(Sizes.size24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Gaps.v120,
+                    const Center(
+                      child: Text(
+                        '푸드피커',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: Sizes.size52,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  Gaps.v52,
+                    Gaps.v52,
 
-                  /// Email Address Input
-                  Container(
-                    margin: const EdgeInsets.only(bottom: Sizes.size28),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CommonText(
-                          textContent: '이메일주소',
-                          textColor: Colors.grey.shade500,
-                          textSize: Sizes.size22,
-                        ),
-                        InputField(
-                          controller: _emailController,
-                          readOnly: false,
-                          obscureText: false,
-                          maxLines: 1,
-                          validator: (value) => _emailValidation(value),
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                        )
-                      ],
+                    /// Email Address Input
+                    Container(
+                      margin: const EdgeInsets.only(bottom: Sizes.size28),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CommonText(
+                            textContent: '이메일주소',
+                            textColor: Colors.grey.shade500,
+                            textSize: Sizes.size22,
+                          ),
+                          InputField(
+                            controller: _emailController,
+                            readOnly: false,
+                            obscureText: false,
+                            maxLines: 1,
+                            validator: (value) => _emailValidation(value),
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
 
-                  /// Password Input
-                  Container(
-                    margin: const EdgeInsets.only(bottom: Sizes.size28),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CommonText(
-                          textContent: '패스워드',
-                          textColor: Colors.grey.shade500,
-                          textSize: Sizes.size22,
-                        ),
-                        InputField(
-                          controller: _pwdController,
-                          readOnly: false,
-                          obscureText: true,
-                          maxLines: 1,
-                          validator: (value) => _pwdValidation(value),
-                          keyboardType: TextInputType.visiblePassword,
-                          textInputAction: TextInputAction.done,
-                        )
-                      ],
+                    /// Password Input
+                    Container(
+                      margin: const EdgeInsets.only(bottom: Sizes.size28),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CommonText(
+                            textContent: '패스워드',
+                            textColor: Colors.grey.shade500,
+                            textSize: Sizes.size22,
+                          ),
+                          InputField(
+                            controller: _pwdController,
+                            readOnly: false,
+                            obscureText: true,
+                            maxLines: 1,
+                            validator: (value) => _pwdValidation(value),
+                            keyboardType: TextInputType.visiblePassword,
+                            textInputAction: TextInputAction.done,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
 
-                  /// Login Process
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: Sizes.size58,
-                    margin: const EdgeInsets.only(
-                      bottom: Sizes.size22,
-                      top: Sizes.size48,
-                    ),
-                    child: CommonButton(
-                      btnText: '로그인',
-                      btnBackgroundColor: Colors.black,
-                      textColor: Colors.white,
-                      btnAction: () {
-                        print('로그인 로직 처리!');
-                      },
-                    ),
-                  ),
+                    /// Login Process
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: Sizes.size58,
+                      margin: const EdgeInsets.only(
+                        bottom: Sizes.size22,
+                        top: Sizes.size48,
+                      ),
+                      child: CommonButton(
+                        btnText: '로그인',
+                        btnBackgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        btnAction: () async {
+                          var emailValue = _emailController.text;
+                          var pwdValue = _pwdController.text;
 
-                  /// Navigate to SignUp Screen
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: Sizes.size58,
-                    margin: const EdgeInsets.only(bottom: Sizes.size22),
-                    child: CommonButton(
-                      btnText: '회원 가입',
-                      btnBackgroundColor: Theme.of(context).primaryColor,
-                      textColor: Colors.white,
-                      btnAction: () async {
-                        await Navigator.pushNamed(
-                          context,
-                          SignUpScreen.routeName,
-                        );
-                      },
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+
+                          bool success = await _loginWithEmail(
+                            emailValue,
+                            pwdValue,
+                          );
+
+                          var msg = '잘못된 회원 정보입니다!';
+
+                          if (!context.mounted) return;
+
+                          var snackBar = AppSnackbar(
+                            context: context,
+                            msg: msg,
+                          );
+
+                          if (!success) {
+                            snackBar.showSnackbar(context);
+
+                            return;
+                          } else {
+                            Navigator.popAndPushNamed(
+                              context,
+                              MainScreen.routeName,
+                            );
+                          }
+                        },
+                      ),
                     ),
-                  ),
-                ],
+
+                    /// Navigate to SignUp Screen
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: Sizes.size58,
+                      margin: const EdgeInsets.only(bottom: Sizes.size22),
+                      child: CommonButton(
+                        btnText: '회원 가입',
+                        btnBackgroundColor: Theme.of(context).primaryColor,
+                        textColor: Colors.white,
+                        btnAction: () {
+                          Navigator.pushNamed(
+                            context,
+                            SignUpScreen.routeName,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
