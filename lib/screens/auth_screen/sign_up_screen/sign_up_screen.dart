@@ -434,13 +434,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           pwdValue,
                         );
 
-                        var msg = '회원 가입이 정상적으로 처리 되지 않았습니다!';
-
                         if (!context.mounted) return;
 
                         var snackBar = AppSnackbar(
                           context: context,
-                          msg: msg,
+                          msg: '회원 가입이 정상적으로 처리 되지 않았습니다!',
                         );
 
                         if (!success) {

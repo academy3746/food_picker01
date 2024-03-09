@@ -214,13 +214,11 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                             pwdValue,
                           );
 
-                          var msg = '잘못된 회원 정보입니다!';
-
                           if (!context.mounted) return;
 
                           var snackBar = AppSnackbar(
                             context: context,
-                            msg: msg,
+                            msg: '잘못된 회원 정보입니다!',
                           );
 
                           if (!success) {
