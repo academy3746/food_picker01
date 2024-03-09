@@ -1,10 +1,11 @@
 // ignore_for_file: avoid_print, deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:food_picker/common/constants/sizes.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_picker/common/widgets/back_handler_button.dart';
-import 'package:food_picker/common/widgets/common_app_bar.dart';
-import 'package:food_picker/common/widgets/common_text.dart';
+import 'package:food_picker/screens/home_screen/home_screen.dart';
+import 'package:food_picker/screens/info_screen/info_screen.dart';
+import 'package:food_picker/screens/like_screen/like_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,6 +19,16 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   /// 뒤로가기 처리
   BackHandlerButton? backHandlerButton;
+
+  /// Selected Index No.
+  int screenIndex = 0;
+
+  /// Widget Screens in MainScreen
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const LikeScreen(),
+    const InfoScreen(),
+  ];
 
   @override
   void initState() {
@@ -58,22 +69,33 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: const CommonAppBar(
-          title: 'IS TESTING',
-          isLeading: false,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CommonText(
-                textContent: 'DEMO APP',
-                textColor: Colors.grey.shade400,
-                textSize: Sizes.size20,
-                textWeight: FontWeight.w700,
-              ),
-            ],
-          ),
+        body: _screens.elementAt(screenIndex),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: screenIndex,
+          backgroundColor: Theme.of(context).primaryColor,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.black45,
+          onTap: (index) {
+            setState(() {
+              screenIndex = index;
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.map),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.heart),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.user),
+              label: '',
+            ),
+          ],
         ),
       ),
     );

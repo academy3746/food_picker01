@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_picker/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
+import 'package:food_picker/screens/home_screen/home_screen.dart';
+import 'package:food_picker/screens/info_screen/info_screen.dart';
+import 'package:food_picker/screens/like_screen/like_screen.dart';
 import 'package:food_picker/screens/main_screen/main_screen.dart';
 import 'package:food_picker/screens/splash_screen/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -44,6 +47,9 @@ class FoodApp extends StatelessWidget {
         LoginScreen.routeName: (context) => const LoginScreen(),
         SignUpScreen.routeName: (context) => const SignUpScreen(),
         MainScreen.routeName: (context) => const MainScreen(),
+        HomeScreen.routeName: (context) => const HomeScreen(),
+        LikeScreen.routeName: (context) => const LikeScreen(),
+        InfoScreen.routeName: (context) => const InfoScreen(),
       },
     );
   }
