@@ -1,11 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:food_picker/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
-import 'package:food_picker/screens/home_screen/home_screen.dart';
-import 'package:food_picker/screens/info_screen/info_screen.dart';
-import 'package:food_picker/screens/like_screen/like_screen.dart';
 import 'package:food_picker/screens/main_screen/main_screen.dart';
 import 'package:food_picker/screens/splash_screen/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'screens/auth_screen/login_screen/login_screen.dart';
 
 Future<void> main() async {
@@ -16,10 +16,18 @@ Future<void> main() async {
   const String key =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2ZnJnbmt5eGd0ZGZyZ3htcm9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkzNjg0NzMsImV4cCI6MjAyNDk0NDQ3M30.SYPWJrTJDDquFfZCdS8X4L0iN-q3fsKB_vdWBEIPvyo';
 
+  const String naverClientId = '0ldmdl71hs';
+
   /// Initialize Supabase
   await Supabase.initialize(
     url: url,
     anonKey: key,
+  );
+
+  /// Initialize Naver Map SDK
+  await NaverMapSdk.instance.initialize(
+    clientId: naverClientId,
+    onAuthFailed: (error) => print('Naver SDK 인증 오류: $error'),
   );
 
   runApp(const FoodApp());
@@ -47,9 +55,6 @@ class FoodApp extends StatelessWidget {
         LoginScreen.routeName: (context) => const LoginScreen(),
         SignUpScreen.routeName: (context) => const SignUpScreen(),
         MainScreen.routeName: (context) => const MainScreen(),
-        HomeScreen.routeName: (context) => const HomeScreen(),
-        LikeScreen.routeName: (context) => const LikeScreen(),
-        InfoScreen.routeName: (context) => const InfoScreen(),
       },
     );
   }
