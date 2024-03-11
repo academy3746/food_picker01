@@ -27,7 +27,7 @@ Future<void> main() async {
   /// Initialize Naver Map SDK
   await NaverMapSdk.instance.initialize(
     clientId: naverClientId,
-    onAuthFailed: (error) => print('Naver SDK 인증 오류: $error'),
+    onAuthFailed: (error) => print('${error.code}: ${error.message}'),
   );
 
   runApp(const FoodApp());
