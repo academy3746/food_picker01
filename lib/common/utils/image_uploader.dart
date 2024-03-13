@@ -8,7 +8,7 @@ class ImageUploader {
 
   final File? imgFile;
 
-  final void Function(File? image) onImageUploaded;
+  final void Function(File? file) onImageUploaded;
 
   ImageUploader({
     required this.context,
@@ -40,7 +40,7 @@ class ImageUploader {
     }
   }
 
-  /// 삭제
+  /// 이미지 삭제
   Future<void> deleteImage() async {
     onImageUploaded(null);
   }
@@ -66,7 +66,7 @@ class ImageUploader {
                   await takePhoto();
                 },
                 child: const Text(
-                  '촬영하기',
+                  '사진 촬영',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: Sizes.size18,
@@ -80,7 +80,7 @@ class ImageUploader {
                   await getGalleryImage();
                 },
                 child: const Text(
-                  '갤러리',
+                  '사진 선택',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: Sizes.size18,
@@ -105,6 +105,25 @@ class ImageUploader {
           ),
         );
       },
+    );
+  }
+
+  /// 사진 등록 Container
+  Widget postImage() {
+    return Container(
+      height: Sizes.size150,
+      width: MediaQuery.of(context).size.width,
+      decoration: ShapeDecoration(
+        color: Theme.of(context).primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Sizes.size6),
+        ),
+      ),
+      child: const Icon(
+        Icons.image_search_rounded,
+        color: Colors.white,
+        size: Sizes.size96,
+      ),
     );
   }
 }

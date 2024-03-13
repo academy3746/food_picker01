@@ -9,9 +9,9 @@ import 'package:food_picker/common/utils/common_app_bar.dart';
 import 'package:food_picker/common/utils/common_button.dart';
 import 'package:food_picker/common/utils/common_input_field.dart';
 import 'package:food_picker/common/utils/common_text.dart';
+import 'package:food_picker/common/utils/image_uploader.dart';
 import 'package:food_picker/data/model/member.dart';
 import 'package:food_picker/features/auth/widgets/profile.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -30,6 +30,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   /// 프로필 이미지 주소
   String? imageUrl;
 
+  /// 파일 업로드 기능 수행
+  late ImageUploader uploader;
+
   /// Input Field Controller 객체 생성
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -43,101 +46,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   /// Initialize Supabase Console
   final _supabase = Supabase.instance.client;
 
-  /// 프로필 등록 Bottom Sheet Dialog
-  Future<void> _showProfileUpload() async {
-    showModalBottomSheet(
+  @override
+  void initState() {
+    super.initState();
+
+    uploader = ImageUploader(
       context: context,
-      builder: (context) {
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(
-            top: Sizes.size10,
-            bottom: Sizes.size10,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-
-                  await _takePhoto();
-                },
-                child: const Text(
-                  '촬영하기',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: Sizes.size18,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-
-                  await _getGalleryImage();
-                },
-                child: const Text(
-                  '갤러리',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: Sizes.size18,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-
-                  await _deleteImage();
-                },
-                child: const Text(
-                  '프로필 삭제',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: Sizes.size18,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+      imgFile: profileImg,
+      onImageUploaded: _onImageUploaded,
     );
   }
 
-  /// 사진 촬영
-  Future<void> _takePhoto() async {
-    var image = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-      imageQuality: 10,
-    );
-
-    if (image != null) {
-      setState(() {
-        profileImg = File(image.path);
-      });
-    }
-  }
-
-  /// 갤러리에서 사진 선택
-  Future<void> _getGalleryImage() async {
-    var image = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 10,
-    );
-
-    if (image != null) {
-      setState(() {
-        profileImg = File(image.path);
-      });
-    }
-  }
-
-  /// 프로필 삭제
-  Future<void> _deleteImage() async {
+  /// ImageUploader 콜백 동작 별도 처리
+  void _onImageUploaded(File? file) {
     setState(() {
-      profileImg = null;
+      profileImg = file;
     });
   }
 
@@ -219,7 +142,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         imageUrl = _supabase.storage.from('food_pick').getPublicUrl(path);
       }
 
-      // 2. INSERT Database
       await _supabase.from('member').insert(
             MemberModel(
               name: _nameController.text,
@@ -258,8 +180,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   /// Profile IMG
                   GestureDetector(
-                    onTap: () {
-                      _showProfileUpload();
+                    onTap: () async {
+                      uploader.showImageUploadBottomSheet();
                     },
                     child: BuildProfile(profileImg: profileImg),
                   ),
