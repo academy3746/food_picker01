@@ -8,6 +8,7 @@ import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/widgets/common_button.dart';
 import 'package:food_picker/common/widgets/common_text.dart';
 import 'package:food_picker/data/model/food_store.dart';
+import 'package:food_picker/features/post/views/edit_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -227,18 +228,18 @@ class _HomeScreenState extends State<HomeScreen> {
             onMapReady: (controller) async {
               mapController = controller;
 
-              // 1. 현재 위치 정보 추출
+              /// 1. 현재 위치 정보 추출
               NCameraPosition myPosition = await _getMyLocation();
 
-              // 2. 마커 생성
+              /// 2. 마커 생성
               await _buildMarkersOnMap();
 
-              // 3. 현재 위치를 중심 좌표로, 카메라 시점 전환
+              /// 3. 현재 위치를 중심 좌표로, 카메라 시점 전환
               mapController.updateCamera(
                 NCameraUpdate.fromCameraPosition(myPosition),
               );
 
-              // 4. 중심 좌표 전환 완료 신호 전송
+              /// 4. 중심 좌표 전환 완료 신호 전송
               mapCompleter.complete(mapController);
             },
             options: const NaverMapViewOptions(
@@ -252,7 +253,10 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
-          print('게시글 작성 화면으로 이동!');
+          Navigator.pushNamed(
+            context,
+            EditScreen.routeName,
+          );
         },
         shape: const CircleBorder(),
         child: const Icon(

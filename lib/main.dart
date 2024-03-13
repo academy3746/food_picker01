@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:food_picker/features/auth/views/login_screen.dart';
 import 'package:food_picker/features/auth/views/sign_up_screen.dart';
 import 'package:food_picker/features/main/views/main_screen.dart';
+import 'package:food_picker/features/post/views/edit_screen.dart';
 import 'package:food_picker/features/splash/views/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -58,6 +59,7 @@ class FoodApp extends StatelessWidget {
         LoginScreen.routeName: (context) => const LoginScreen(),
         SignUpScreen.routeName: (context) => const SignUpScreen(),
         MainScreen.routeName: (context) => const MainScreen(),
+        EditScreen.routeName: (context) => const EditScreen(),
       },
     );
   }
