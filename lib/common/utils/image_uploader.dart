@@ -107,23 +107,4 @@ class ImageUploader {
       },
     );
   }
-
-  /// 사진 등록 Container
-  Widget postImage() {
-    return Container(
-      height: Sizes.size150,
-      width: MediaQuery.of(context).size.width,
-      decoration: ShapeDecoration(
-        color: Theme.of(context).primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Sizes.size6),
-        ),
-      ),
-      child: const Icon(
-        Icons.image_search_rounded,
-        color: Colors.white,
-        size: Sizes.size96,
-      ),
-    );
-  }
 }

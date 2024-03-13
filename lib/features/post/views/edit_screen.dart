@@ -58,12 +58,49 @@ class _EditScreenState extends State<EditScreen> {
                 onTap: () async {
                   await uploader.showImageUploadBottomSheet();
                 },
-                child: uploader.postImage(),
+                child: postImage(),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  /// 사진 등록 Container
+  Widget postImage() {
+    if (storeImg == null) {
+      return Container(
+        height: Sizes.size250,
+        width: MediaQuery.of(context).size.width,
+        decoration: ShapeDecoration(
+          color: Colors.grey.shade400,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Sizes.size6),
+          ),
+        ),
+        child: const Icon(
+          Icons.image_search_rounded,
+          color: Colors.white,
+          size: Sizes.size96,
+        ),
+      );
+    } else {
+      return Container(
+        height: Sizes.size250,
+        width: MediaQuery.of(context).size.width,
+        decoration: ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(width: 2),
+            borderRadius: BorderRadius.circular(Sizes.size6),
+          ),
+        ),
+        child: Image.file(
+          storeImg!,
+          fit: BoxFit.cover,
+        ),
+      );
+    }
   }
 }
