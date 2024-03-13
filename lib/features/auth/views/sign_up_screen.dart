@@ -10,7 +10,7 @@ import 'package:food_picker/common/widgets/common_button.dart';
 import 'package:food_picker/common/widgets/common_input_field.dart';
 import 'package:food_picker/common/widgets/common_text.dart';
 import 'package:food_picker/data/model/member.dart';
-import 'package:food_picker/screens/auth_screen/sign_up_screen/widgets/profile.dart';
+import 'package:food_picker/features/auth/widgets/profile.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

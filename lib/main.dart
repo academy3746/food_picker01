@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:food_picker/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
-import 'package:food_picker/screens/main_screen/main_screen.dart';
-import 'package:food_picker/screens/splash_screen/splash_screen.dart';
+import 'package:food_picker/features/auth/views/login_screen.dart';
+import 'package:food_picker/features/auth/views/sign_up_screen.dart';
+import 'package:food_picker/features/main/views/main_screen.dart';
+import 'package:food_picker/features/splash/views/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'screens/auth_screen/login_screen/login_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

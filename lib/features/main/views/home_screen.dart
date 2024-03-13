@@ -249,6 +249,18 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () {
+          print('게시글 작성 화면으로 이동!');
+        },
+        shape: const CircleBorder(),
+        child: const Icon(
+          Icons.post_add_outlined,
+          size: Sizes.size32,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }

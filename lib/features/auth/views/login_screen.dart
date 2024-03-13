@@ -8,8 +8,8 @@ import 'package:food_picker/common/widgets/back_handler_button.dart';
 import 'package:food_picker/common/widgets/common_button.dart';
 import 'package:food_picker/common/widgets/common_input_field.dart';
 import 'package:food_picker/common/widgets/common_text.dart';
-import 'package:food_picker/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
-import 'package:food_picker/screens/main_screen/main_screen.dart';
+import 'package:food_picker/features/auth/views/sign_up_screen.dart';
+import 'package:food_picker/features/main/views/main_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
