@@ -345,12 +345,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         var emailValue = _emailController.text;
                         var pwdValue = _pwdController.text;
 
-                        // Check Validation
+                        /// Check Validation
                         if (!_formKey.currentState!.validate()) {
                           return;
                         }
 
-                        // CRUD on Supabase Server
+                        /// CRUD on Supabase Server
                         bool success = await _registerAccount(
                           emailValue,
                           pwdValue,

@@ -252,11 +252,21 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {
-          Navigator.pushNamed(
+        onPressed: () async {
+          var result = await Navigator.pushNamed(
             context,
             EditScreen.routeName,
           );
+
+          if (result != null) {
+            if (result == 'edit_completed') {
+              _storeList = await _fetchStoreData();
+
+              await _buildMarkersOnMap();
+
+              setState(() {});
+            }
+          }
         },
         shape: const CircleBorder(),
         child: const Icon(

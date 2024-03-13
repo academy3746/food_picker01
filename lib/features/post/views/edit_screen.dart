@@ -1,13 +1,20 @@
+// ignore_for_file: avoid_print
+
+import 'dart:convert';
 import 'dart:io';
 import 'package:daum_postcode_search/data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:food_picker/common/constants/sizes.dart';
+import 'package:food_picker/common/utils/app_snackbar.dart';
+import 'package:food_picker/common/utils/common_button.dart';
 import 'package:food_picker/common/utils/common_input_field.dart';
 import 'package:food_picker/common/utils/common_text.dart';
 import 'package:food_picker/common/utils/image_uploader.dart';
+import 'package:food_picker/data/model/food_store.dart';
 import 'package:food_picker/features/post/views/post_webview_screen.dart';
 import 'package:food_picker/features/post/widgets/post_app_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class EditScreen extends StatefulWidget {
   const EditScreen({super.key});
@@ -21,6 +28,9 @@ class EditScreen extends StatefulWidget {
 class _EditScreenState extends State<EditScreen> {
   /// 이미지 파일 업로드 객체 생성
   File? storeImg;
+
+  /// 프로필 이미지 주소
+  String? imageUrl;
 
   /// 파일 업로드 기능 수행
   late ImageUploader uploader;
@@ -87,6 +97,76 @@ class _EditScreenState extends State<EditScreen> {
     }
 
     return null;
+  }
+
+  /// Data INSERT on `food_store` Table
+  Future<bool> _editFoodStoreInfo(String storeAddrValue, String storeNameValue,
+      String storeCommentValue) async {
+    /// 1. 이미지 업로드
+    if (storeImg != null) {
+      var now = DateTime.now();
+
+      var path = 'stores/_$now.jpg';
+
+      final imgFile = storeImg;
+
+      await _supabase.storage.from('food_pick').upload(
+            path,
+            imgFile!,
+            fileOptions: const FileOptions(upsert: true),
+          );
+
+      imageUrl = _supabase.storage.from('food_pick').getPublicUrl(path);
+    }
+
+    /// 2. Naver Geocoding API 활용 주소 변환
+    final String naverApiUrl =
+        'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${_storeAddrController.text}';
+
+    final naverApiResponse = await http.get(
+      Uri.parse(naverApiUrl),
+      headers: <String, String>{
+        'X-NCP-APIGW-API-KEY-ID': '0ldmdl71hs',
+        'X-NCP-APIGW-API-KEY': 'X8A2rJntOPYTSYlax8wtstKlOlJ12hcykYusUzyX',
+        'Accept': 'application/json',
+      },
+    );
+
+    if (naverApiResponse.statusCode == 200) {
+      Map<String, dynamic> fromNaver = jsonDecode(naverApiResponse.body);
+
+      if (fromNaver['meta']['totalCount'] == 0) {
+        if (!mounted) return false;
+        var snackbar = AppSnackbar(
+          context: context,
+          msg: '위치 계산이 잘못 되었습니다.',
+        );
+
+        snackbar.showSnackbar(context);
+
+        return false;
+      }
+
+      double lat = double.parse(fromNaver['addresses'][0]['y']);
+      double lng = double.parse(fromNaver['addresses'][0]['x']);
+
+      /// 3. DB INSERT
+      await _supabase.from('food_store').insert(
+            FoodStoreModel(
+              storeImgUrl: imageUrl,
+              latitude: lat,
+              longitude: lng,
+              storeAddress: storeAddrValue,
+              uid: _supabase.auth.currentUser!.id,
+              storeName: storeNameValue,
+              storeComment: storeCommentValue,
+            ).toMap(),
+          );
+
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -175,7 +255,6 @@ class _EditScreenState extends State<EditScreen> {
                         ),
                         InputField(
                           controller: _storeNameController,
-                          keyboardType: TextInputType.name,
                           textInputAction: TextInputAction.next,
                           enabled: true,
                           readOnly: false,
@@ -203,7 +282,6 @@ class _EditScreenState extends State<EditScreen> {
                         ),
                         InputField(
                           controller: _storeCommentController,
-                          keyboardType: TextInputType.name,
                           textInputAction: TextInputAction.newline,
                           enabled: true,
                           readOnly: false,
@@ -211,10 +289,66 @@ class _EditScreenState extends State<EditScreen> {
                           hintText: '맛집 관련 설명을 입력해 주세요',
                           obscureText: false,
                           maxLines: 5,
-                          maxLength: 500,
+                          maxLength: 1000,
                           validator: (value) => _storeCommentValidation(value),
                         ),
                       ],
+                    ),
+                  ),
+
+                  /// 작성 완료 Button
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: Sizes.size68,
+                    margin: const EdgeInsets.symmetric(vertical: Sizes.size32),
+                    child: CommonButton(
+                      btnBackgroundColor: Theme.of(context).primaryColor,
+                      btnText: '작성 완료',
+                      textColor: Colors.white,
+                      btnAction: () async {
+                        var storeAddrValue = _storeAddrController.text;
+                        var storeNameValue = _storeNameController.text;
+                        var storeCommentValue = _storeCommentController.text;
+
+                        /// 1. Validation
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
+
+                        /// 2. DB INSERT
+                        bool success = await _editFoodStoreInfo(
+                          storeAddrValue,
+                          storeNameValue,
+                          storeCommentValue,
+                        );
+
+                        if (!context.mounted) return;
+
+                        if (!success) {
+                          var snackbar = AppSnackbar(
+                            context: context,
+                            msg: '게시물 등록 중 문제가 발생하였습니다.',
+                          );
+
+                          snackbar.showSnackbar(context);
+
+                          Navigator.pop(context);
+
+                          return;
+                        } else {
+                          var snackbar = AppSnackbar(
+                            context: context,
+                            msg: '게시물을 정상적으로 등록하였습니다.',
+                          );
+
+                          snackbar.showSnackbar(context);
+
+                          Navigator.pop(
+                            context,
+                            'edit_completed',
+                          );
+                        }
+                      },
                     ),
                   ),
                 ],
