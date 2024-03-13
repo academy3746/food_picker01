@@ -46,9 +46,6 @@ class FoodApp extends StatelessWidget {
       title: 'Food Picker',
       theme: ThemeData(
         primaryColor: const Color(0xFF82B1FF),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF82B1FF),
-        ),
         useMaterial3: true,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),

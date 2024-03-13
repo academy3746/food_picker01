@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
-import 'package:food_picker/common/widgets/common_text.dart';
+import 'package:food_picker/common/utils/common_text.dart';
 import 'package:food_picker/features/main/views/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {

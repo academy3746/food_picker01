@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:food_picker/common/widgets/back_handler_button.dart';
+import 'package:food_picker/common/utils/back_handler_button.dart';
 import 'package:food_picker/features/main/views/home_screen.dart';
 import 'package:food_picker/features/main/views/info_screen.dart';
 import 'package:food_picker/features/main/views/like_screen.dart';

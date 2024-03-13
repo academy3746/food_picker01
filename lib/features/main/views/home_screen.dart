@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
-import 'package:food_picker/common/widgets/common_button.dart';
-import 'package:food_picker/common/widgets/common_text.dart';
+import 'package:food_picker/common/utils/common_button.dart';
+import 'package:food_picker/common/utils/common_text.dart';
 import 'package:food_picker/data/model/food_store.dart';
 import 'package:food_picker/features/post/views/edit_screen.dart';
 import 'package:geolocator/geolocator.dart';
@@ -46,10 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Food Store 데이터 출력
   Future<List<FoodStoreModel>>? _fetchStoreData() async {
-    // 1. Supabase Database Access
+    /// 1. Supabase Database Access
     final storeListMap = await _supabase.from('food_store').select();
 
-    // 2. JSON Parsing
+    /// 2. JSON Parsing
     List<FoodStoreModel> storeList =
         storeListMap.map((data) => FoodStoreModel.fromMap(data)).toList();
 
@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// 위치 정보 획득
   Future<NCameraPosition> _getMyLocation() async {
-    // 1. 위치 권한 요청
+    /// 1. 위치 권한 요청
     bool service;
 
     LocationPermission permission;
@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       permission = await Geolocator.requestPermission();
     }
 
-    // 2. 위치 정보 획득
+    /// 2. 위치 정보 획득
     Position position = await Geolocator.getCurrentPosition();
 
     return NCameraPosition(
