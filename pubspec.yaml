@@ -21,8 +21,8 @@ dependencies:
   http: ^1.2.1
   daum_postcode_search: ^0.0.2
   intl: ^0.19.0
-  flutter_inappwebview: ^5.8.0
   font_awesome_flutter: ^10.7.0
+  flutter_inappwebview: ^5.8.0
 
 dev_dependencies:
   flutter_test:
