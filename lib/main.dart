@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:food_picker/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
 import 'package:food_picker/screens/main_screen/main_screen.dart';
 import 'package:food_picker/screens/splash_screen/splash_screen.dart';
@@ -29,6 +30,8 @@ Future<void> main() async {
     clientId: naverClientId,
     onAuthFailed: (error) => print('${error.code}: ${error.message}'),
   );
+
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
   runApp(const FoodApp());
 }

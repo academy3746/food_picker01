@@ -19,7 +19,10 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 3), () async {
-      await Navigator.pushReplacementNamed(context, MainScreen.routeName);
+      await Navigator.pushReplacementNamed(
+        context,
+        MainScreen.routeName,
+      );
     });
   }
 
