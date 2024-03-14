@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:food_picker/data/model/food_store.dart';
 import 'package:food_picker/features/auth/views/login_screen.dart';
 import 'package:food_picker/features/auth/views/sign_up_screen.dart';
+import 'package:food_picker/features/post/models/food_store.dart';
 import 'package:food_picker/features/post/views/detail_screen.dart';
 import 'package:food_picker/features/main/views/main_screen.dart';
 import 'package:food_picker/features/post/views/edit_screen.dart';

@@ -7,7 +7,7 @@ import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/utils/common_button.dart';
 import 'package:food_picker/common/utils/common_text.dart';
-import 'package:food_picker/data/model/food_store.dart';
+import 'package:food_picker/features/post/models/food_store.dart';
 import 'package:food_picker/features/post/views/detail_screen.dart';
 import 'package:food_picker/features/post/views/edit_screen.dart';
 import 'package:geolocator/geolocator.dart';
