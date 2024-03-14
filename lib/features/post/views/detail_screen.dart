@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_picker/common/constants/sizes.dart';
+import 'package:food_picker/common/utils/app_snackbar.dart';
 import 'package:food_picker/common/utils/common_button.dart';
 import 'package:food_picker/common/utils/common_text.dart';
+import 'package:food_picker/data/model/favorite_store.dart';
 import 'package:food_picker/data/model/food_store.dart';
 import 'package:food_picker/data/model/member.dart';
 import 'package:food_picker/features/post/widgets/data_container.dart';
@@ -27,12 +29,17 @@ class _DetailScreenState extends State<DetailScreen> {
   final _supabase = Supabase.instance.client;
 
   /// 글쓴이 닉네임 멤버 변수 생성
-  String? _memberNick = '';
+  String? _memberNick;
+
+  /// 찜하기 상태 Boolean
+  bool _favorite = false;
 
   /// 게시물 글쓴이 확인
   Future<void> _getUploaderName() async {
-    final memberMap =
-        await _supabase.from('member').select().eq('uid', widget.model.uid);
+    final memberMap = await _supabase.from('member').select().eq(
+          'uid',
+          widget.model.uid,
+        );
 
     MemberModel memberModel =
         memberMap.map((data) => MemberModel.fromMap(data)).single;
@@ -42,8 +49,55 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
-  /// 게시글 찜하기 상태 확인
-  Future<void> _getFavorite() async {}
+  /// 게시물 찜하기
+  Future<void> _likeThisStore() async {
+    await _supabase.from('favorite_store').upsert(
+          FavoriteModel(
+            foodStoreIdx: widget.model.idx!,
+            favoriteUid: _supabase.auth.currentUser!.id,
+          ).toMap(),
+        );
+  }
+
+  /// 게시물 찜하기 취소
+  Future<void> _dislikeThisStore() async {
+    await _supabase
+        .from('favorite_store')
+        .delete()
+        .eq(
+          'food_store_idx',
+          widget.model.idx!,
+        )
+        .eq(
+          'favorite_uid',
+          _supabase.auth.currentUser!.id,
+        );
+  }
+
+  /// 게시물 찜하기 상태 확인
+  Future<void> _getFavorite() async {
+    final favoriteMap = await _supabase
+        .from('favorite_store')
+        .select()
+        .eq(
+          'food_store_idx',
+          widget.model.idx!,
+        )
+        .eq(
+          'favorite_uid',
+          _supabase.auth.currentUser!.id,
+        );
+
+    if (favoriteMap.isNotEmpty) {
+      setState(() {
+        _favorite = true;
+      });
+    } else {
+      setState(() {
+        _favorite = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -72,7 +126,7 @@ class _DetailScreenState extends State<DetailScreen> {
             children: [
               /// 이미지 파일
               postImage(),
-        
+
               /// 맛집 위치
               Container(
                 margin: const EdgeInsets.only(top: Sizes.size24),
@@ -89,7 +143,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   ],
                 ),
               ),
-        
+
               /// 글쓴이
               Container(
                 margin: const EdgeInsets.only(top: Sizes.size24),
@@ -106,7 +160,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   ],
                 ),
               ),
-        
+
               /// 맛집 설명
               Container(
                 margin: const EdgeInsets.only(top: Sizes.size24),
@@ -123,19 +177,55 @@ class _DetailScreenState extends State<DetailScreen> {
                   ],
                 ),
               ),
-        
+
               /// 찜하기 Button
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: Sizes.size68,
-                margin: const EdgeInsets.symmetric(vertical: Sizes.size32),
-                child: CommonButton(
-                  btnBackgroundColor: Theme.of(context).primaryColor,
-                  btnText: '찜하기',
-                  textColor: Colors.white,
-                  btnAction: () {},
-                ),
-              ),
+              _favorite
+                  ? Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: Sizes.size68,
+                      margin:
+                          const EdgeInsets.symmetric(vertical: Sizes.size32),
+                      child: CommonButton(
+                        btnBackgroundColor: Colors.grey.shade400,
+                        btnText: '해제하기',
+                        textColor: Colors.white,
+                        btnAction: () async {
+                          var snackbar = AppSnackbar(
+                            context: context,
+                            msg: '찜하기를 해제하였습니다!',
+                          );
+
+                          snackbar.showSnackbar(context);
+
+                          await _dislikeThisStore();
+
+                          await _getFavorite();
+                        },
+                      ),
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: Sizes.size68,
+                      margin:
+                          const EdgeInsets.symmetric(vertical: Sizes.size32),
+                      child: CommonButton(
+                        btnBackgroundColor: Theme.of(context).primaryColor,
+                        btnText: '찜하기',
+                        textColor: Colors.white,
+                        btnAction: () async {
+                          var snackbar = AppSnackbar(
+                            context: context,
+                            msg: '해당 맛집을 찜했어요!',
+                          );
+
+                          snackbar.showSnackbar(context);
+
+                          await _likeThisStore();
+
+                          await _getFavorite();
+                        },
+                      ),
+                    ),
             ],
           ),
         ),
