@@ -7,7 +7,9 @@
 3. Server Configuration: Supabse (RDBMS)
 4. Native App Performance
 
-- In App 사진 촬영 및 갤러리 접근: Image Picker
+- In App 사진 촬영 / 갤러리: Image Picker
+- Geolocation Service: Flutter Naver Map
+- In App 주소 검색: Daum PostCode Search / Flutter In App WebView
 
 # External Plugin List
 
@@ -20,4 +22,5 @@
 7. http: ^1.2.1
 8. daum_postcode_search: ^0.0.2
 9. intl: ^0.19.0
-10. flutter_inappwebview: ^5.8.0
+10. font_awesome_flutter: ^10.7.0
+11. flutter_inappwebview: ^5.8.0
