@@ -216,16 +216,23 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
 
                           if (!context.mounted) return;
 
-                          var snackBar = AppSnackbar(
-                            context: context,
-                            msg: '잘못된 회원 정보입니다!',
-                          );
-
                           if (!success) {
+                            var snackBar = AppSnackbar(
+                              context: context,
+                              msg: '잘못된 회원 정보입니다!',
+                            );
+
                             snackBar.showSnackbar(context);
 
                             return;
                           } else {
+                            var snackBar = AppSnackbar(
+                              context: context,
+                              msg: '오늘도 새로운 맛집을 찾아 볼까요?',
+                            );
+
+                            snackBar.showSnackbar(context);
+
                             Navigator.popAndPushNamed(
                               context,
                               MainScreen.routeName,

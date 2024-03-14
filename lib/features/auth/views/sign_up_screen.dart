@@ -358,16 +358,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                         if (!context.mounted) return;
 
-                        var snackBar = AppSnackbar(
-                          context: context,
-                          msg: '회원 가입이 정상적으로 처리 되지 않았습니다!',
-                        );
-
                         if (!success) {
+                          var snackBar = AppSnackbar(
+                            context: context,
+                            msg: '회원 가입이 정상적으로 처리 되지 않았습니다!',
+                          );
+
                           snackBar.showSnackbar(context);
 
                           return;
                         } else {
+                          var snackBar = AppSnackbar(
+                            context: context,
+                            msg: '환영 합니다! 같이 새로운 맛집을 찾아 볼까요?',
+                          );
+
+                          snackBar.showSnackbar(context);
+
                           Navigator.pop(context);
                         }
                       },
