@@ -268,14 +268,14 @@ class _EditScreenState extends State<EditScreen> {
                     ),
                   ),
 
-                  /// 메모
+                  /// 맛집 설명
                   Container(
                     margin: const EdgeInsets.only(top: Sizes.size24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const CommonText(
-                          textContent: '메모',
+                          textContent: '맛집 설명',
                           textSize: Sizes.size20,
                           textColor: Colors.black,
                           textWeight: FontWeight.w700,
@@ -388,7 +388,7 @@ class _EditScreenState extends State<EditScreen> {
           decoration: ShapeDecoration(
             color: Colors.white,
             shape: RoundedRectangleBorder(
-              side: const BorderSide(width: 1),
+              side: const BorderSide(width: 2),
               borderRadius: BorderRadius.circular(Sizes.size6),
             ),
           ),

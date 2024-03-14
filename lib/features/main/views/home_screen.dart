@@ -8,6 +8,7 @@ import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/utils/common_button.dart';
 import 'package:food_picker/common/utils/common_text.dart';
 import 'package:food_picker/data/model/food_store.dart';
+import 'package:food_picker/features/post/views/detail_screen.dart';
 import 'package:food_picker/features/post/views/edit_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -185,9 +186,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: CommonButton(
                       btnBackgroundColor: Theme.of(context).primaryColor,
                       textColor: Colors.white,
-                      btnText: '자세히',
-                      btnAction: () {
-                        print('상세 화면으로 이동!');
+                      btnText: '자세히 보기',
+                      btnAction: () async {
+                        Navigator.of(context).pop();
+
+                        await Navigator.pushNamed(
+                          context,
+                          DetailScreen.routeName,
+                          arguments: model,
+                        );
                       },
                     ),
                   ),
