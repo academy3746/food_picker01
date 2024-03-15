@@ -85,6 +85,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  /// 검색 결과에 따른 맛집 리스트 위젯
   Widget storeInfoList(FoodStoreModel model) {
     return Container(
       margin: const EdgeInsets.all(Sizes.size20),
@@ -165,6 +166,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  /// 찜 상태 확인 위젯
   Widget favoriteState(FoodStoreModel model) {
     var status = false;
 
