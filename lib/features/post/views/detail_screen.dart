@@ -111,123 +111,139 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PostAppBar(
-        title: widget.model.storeName,
-        isLeading: true,
-      ),
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        child: Container(
-          margin: const EdgeInsets.all(Sizes.size20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// 이미지 파일
-              postImage(),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(
+          context,
+          'back_from_detail',
+        );
 
-              /// 맛집 위치
-              Container(
-                margin: const EdgeInsets.only(top: Sizes.size24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const CommonText(
-                      textContent: '맛집 위치 (도로명 주소)',
-                      textSize: Sizes.size20,
-                      textColor: Colors.black,
-                      textWeight: FontWeight.w700,
-                    ),
-                    DataContainer(foodStoreModel: widget.model.storeAddress),
-                  ],
-                ),
-              ),
+        return Future.value(true);
+      },
+      child: Scaffold(
+        appBar: PostAppBar(
+          title: widget.model.storeName,
+          isLeading: true,
+          backBtn: () {
+            Navigator.pop(
+              context,
+              'back_from_detail',
+            );
+          },
+        ),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          child: Container(
+            margin: const EdgeInsets.all(Sizes.size20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// 이미지 파일
+                postImage(),
 
-              /// 글쓴이
-              Container(
-                margin: const EdgeInsets.only(top: Sizes.size24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const CommonText(
-                      textContent: '글쓴이',
-                      textSize: Sizes.size20,
-                      textColor: Colors.black,
-                      textWeight: FontWeight.w700,
-                    ),
-                    DataContainer(foodStoreModel: _memberNick ?? ''),
-                  ],
-                ),
-              ),
-
-              /// 맛집 설명
-              Container(
-                margin: const EdgeInsets.only(top: Sizes.size24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const CommonText(
-                      textContent: '맛집 설명',
-                      textSize: Sizes.size20,
-                      textColor: Colors.black,
-                      textWeight: FontWeight.w700,
-                    ),
-                    DataContainer(foodStoreModel: widget.model.storeComment),
-                  ],
-                ),
-              ),
-
-              /// 찜하기 Button
-              _favorite
-                  ? Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: Sizes.size68,
-                      margin:
-                          const EdgeInsets.symmetric(vertical: Sizes.size32),
-                      child: CommonButton(
-                        btnBackgroundColor: Colors.grey.shade400,
-                        btnText: '해제하기',
-                        textColor: Colors.white,
-                        btnAction: () async {
-                          var snackbar = AppSnackbar(
-                            context: context,
-                            msg: '찜하기를 해제하였습니다!',
-                          );
-
-                          snackbar.showSnackbar(context);
-
-                          await _dislikeThisStore();
-
-                          await _getFavorite();
-                        },
+                /// 맛집 위치
+                Container(
+                  margin: const EdgeInsets.only(top: Sizes.size24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CommonText(
+                        textContent: '맛집 위치 (도로명 주소)',
+                        textSize: Sizes.size20,
+                        textColor: Colors.black,
+                        textWeight: FontWeight.w700,
                       ),
-                    )
-                  : Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: Sizes.size68,
-                      margin:
-                          const EdgeInsets.symmetric(vertical: Sizes.size32),
-                      child: CommonButton(
-                        btnBackgroundColor: Theme.of(context).primaryColor,
-                        btnText: '찜하기',
-                        textColor: Colors.white,
-                        btnAction: () async {
-                          var snackbar = AppSnackbar(
-                            context: context,
-                            msg: '해당 맛집을 찜했어요!',
-                          );
+                      DataContainer(foodStoreModel: widget.model.storeAddress),
+                    ],
+                  ),
+                ),
 
-                          snackbar.showSnackbar(context);
-
-                          await _likeThisStore();
-
-                          await _getFavorite();
-                        },
+                /// 글쓴이
+                Container(
+                  margin: const EdgeInsets.only(top: Sizes.size24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CommonText(
+                        textContent: '글쓴이',
+                        textSize: Sizes.size20,
+                        textColor: Colors.black,
+                        textWeight: FontWeight.w700,
                       ),
-                    ),
-            ],
+                      DataContainer(foodStoreModel: _memberNick ?? ''),
+                    ],
+                  ),
+                ),
+
+                /// 맛집 설명
+                Container(
+                  margin: const EdgeInsets.only(top: Sizes.size24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CommonText(
+                        textContent: '맛집 설명',
+                        textSize: Sizes.size20,
+                        textColor: Colors.black,
+                        textWeight: FontWeight.w700,
+                      ),
+                      DataContainer(foodStoreModel: widget.model.storeComment),
+                    ],
+                  ),
+                ),
+
+                /// 찜하기 Button
+                _favorite
+                    ? Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: Sizes.size68,
+                        margin:
+                            const EdgeInsets.symmetric(vertical: Sizes.size32),
+                        child: CommonButton(
+                          btnBackgroundColor: Colors.grey.shade400,
+                          btnText: '해제하기',
+                          textColor: Colors.white,
+                          btnAction: () async {
+                            var snackbar = AppSnackbar(
+                              context: context,
+                              msg: '찜하기를 해제하였습니다!',
+                            );
+
+                            snackbar.showSnackbar(context);
+
+                            await _dislikeThisStore();
+
+                            await _getFavorite();
+                          },
+                        ),
+                      )
+                    : Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: Sizes.size68,
+                        margin:
+                            const EdgeInsets.symmetric(vertical: Sizes.size32),
+                        child: CommonButton(
+                          btnBackgroundColor: Theme.of(context).primaryColor,
+                          btnText: '찜하기',
+                          textColor: Colors.white,
+                          btnAction: () async {
+                            var snackbar = AppSnackbar(
+                              context: context,
+                              msg: '해당 맛집을 찜했어요!',
+                            );
+
+                            snackbar.showSnackbar(context);
+
+                            await _likeThisStore();
+
+                            await _getFavorite();
+                          },
+                        ),
+                      ),
+              ],
+            ),
           ),
         ),
       ),

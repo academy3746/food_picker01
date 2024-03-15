@@ -31,11 +31,11 @@ class _StoreInfoListState extends State<StoreInfoList> {
   void initState() {
     super.initState();
 
-    myFavoriteInfo();
+    _getMyFavoriteInfo();
   }
 
   /// 찜 User GET
-  Future<void> myFavoriteInfo() async {
+  Future<void> _getMyFavoriteInfo() async {
     final myFavoriteMap = await _supabase.from('favorite_store').select().eq(
       'favorite_uid',
       _supabase.auth.currentUser!.id,
@@ -87,7 +87,7 @@ class _StoreInfoListState extends State<StoreInfoList> {
                 ),
 
                 /// 맛집 찜 여부 상태
-                _favoriteState(widget.model),
+                favoriteState(widget.model),
               ],
             ),
 
@@ -132,7 +132,7 @@ class _StoreInfoListState extends State<StoreInfoList> {
   }
 
   /// 해당 맛집 찜 여부
-  Widget _favoriteState(FoodStoreModel model) {
+  Widget favoriteState(FoodStoreModel model) {
     for (FavoriteModel favoriteModel in myFavoriteList) {
       if (favoriteModel.foodStoreIdx == model.idx) {
         setState(() {
