@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/utils/app_snackbar.dart';

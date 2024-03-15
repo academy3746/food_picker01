@@ -6,10 +6,12 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
 import 'package:food_picker/common/utils/common_button.dart';
+import 'package:food_picker/common/utils/common_input_field.dart';
 import 'package:food_picker/common/utils/common_text.dart';
 import 'package:food_picker/features/post/models/food_store.dart';
 import 'package:food_picker/features/post/views/detail_screen.dart';
 import 'package:food_picker/features/post/views/edit_screen.dart';
+import 'package:food_picker/features/post/views/search_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -31,6 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Supabase 객체 생성
   final _supabase = Supabase.instance.client;
+
+  /// 검색 입력필드 Controller 객체 생성
+  final TextEditingController _searchController = TextEditingController();
 
   /// Food Store Model 객체 생성
   List<FoodStoreModel>? _storeList;
@@ -207,13 +212,44 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// 검색 입력필드 검증
+  _searchValidator(value) {
+    if (value.isEmpty) {
+      return '올바른 검색어를 입력해 주세요!';
+    }
+    return null;
+  }
+
+  /// 검색 결과 리턴
+  Future<void> _navigateToSearchScreen(String value) async {
+    final foodStoreMap = await _supabase
+        .from('food_store')
+        .select()
+        .like('store_name', '%$value%');
+
+    List<FoodStoreModel> foodStoreSearchList = foodStoreMap
+        .map(
+          (data) => FoodStoreModel.fromMap(data),
+        )
+        .toList();
+
+    if (!mounted) return;
+
+    Navigator.pushNamed(
+      context,
+      SearchScreen.routeName,
+      arguments: foodStoreSearchList,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: FutureBuilder(
         future: _dataStoreFuture,
         builder: (context, snapshot) {
+          _storeList = snapshot.data;
+
           if (!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator.adaptive(),
@@ -229,31 +265,59 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
-          _storeList = snapshot.data;
+          return Stack(
+            children: [
+              /// Naver 지도 화면 렌더링
+              NaverMap(
+                onMapReady: (controller) async {
+                  mapController = controller;
 
-          return NaverMap(
-            onMapReady: (controller) async {
-              mapController = controller;
+                  /// 1. 현재 위치 정보 추출
+                  NCameraPosition myPosition = await _getMyLocation();
 
-              /// 1. 현재 위치 정보 추출
-              NCameraPosition myPosition = await _getMyLocation();
+                  /// 2. 마커 생성
+                  await _buildMarkersOnMap();
 
-              /// 2. 마커 생성
-              await _buildMarkersOnMap();
+                  /// 3. 현재 위치를 중심 좌표로, 카메라 시점 전환
+                  mapController.updateCamera(
+                    NCameraUpdate.fromCameraPosition(myPosition),
+                  );
 
-              /// 3. 현재 위치를 중심 좌표로, 카메라 시점 전환
-              mapController.updateCamera(
-                NCameraUpdate.fromCameraPosition(myPosition),
-              );
+                  /// 4. 중심 좌표 전환 완료 신호 전송
+                  mapCompleter.complete(mapController);
+                },
+                options: const NaverMapViewOptions(
+                  indoorEnable: true,
+                  locationButtonEnable: true,
+                  consumeSymbolTapEvents: false,
+                ),
+              ),
 
-              /// 4. 중심 좌표 전환 완료 신호 전송
-              mapCompleter.complete(mapController);
-            },
-            options: const NaverMapViewOptions(
-              indoorEnable: true,
-              locationButtonEnable: true,
-              consumeSymbolTapEvents: false,
-            ),
+              /// 상단 맛집 검색 입력필드 배치
+              Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: Sizes.size20,
+                  vertical: Sizes.size64,
+                ),
+                child: InputField(
+                  controller: _searchController,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.search,
+                  readOnly: false,
+                  obscureText: false,
+                  maxLines: 1,
+                  fillColor: Colors.white,
+                  filled: true,
+                  validator: (value) => _searchValidator(value),
+                  hintText: '맛집을 찾아 볼까요?',
+                  onFieldSubmitted: (value) async {
+                    _searchController.text = value;
+
+                    await _navigateToSearchScreen(value);
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),

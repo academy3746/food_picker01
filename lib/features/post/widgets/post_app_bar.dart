@@ -14,7 +14,7 @@ class PostAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final bool isLeading;
 
-  final Function? backBtn;
+  final void Function()? backBtn;
 
   final List<Widget>? actions;
 

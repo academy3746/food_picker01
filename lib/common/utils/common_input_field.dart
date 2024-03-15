@@ -17,6 +17,8 @@ class InputField extends StatefulWidget {
     required this.maxLines,
     this.maxLength,
     required this.validator,
+    this.fillColor,
+    this.filled,
   });
 
   final TextEditingController controller;
@@ -29,9 +31,9 @@ class InputField extends StatefulWidget {
 
   final bool readOnly;
 
-  final Function()? onTap;
+  final void Function()? onTap;
 
-  final Function(String value)? onFieldSubmitted;
+  final void Function(String value)? onFieldSubmitted;
 
   final String? hintText;
 
@@ -45,6 +47,10 @@ class InputField extends StatefulWidget {
 
   final FormFieldValidator validator;
 
+  final Color? fillColor;
+
+  final bool? filled;
+
   @override
   State<InputField> createState() => _InputFieldState();
 }
@@ -57,6 +63,8 @@ class _InputFieldState extends State<InputField> {
       child: TextFormField(
         decoration: InputDecoration(
           hintText: widget.hintText,
+          fillColor: widget.fillColor,
+          filled: widget.filled,
           border: OutlineInputBorder(
             borderSide: BorderSide(
               width: 2,

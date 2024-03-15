@@ -9,6 +9,7 @@ import 'package:food_picker/features/post/views/detail_screen.dart';
 import 'package:food_picker/features/main/views/main_screen.dart';
 import 'package:food_picker/features/post/views/edit_screen.dart';
 import 'package:food_picker/features/post/views/post_webview_screen.dart';
+import 'package:food_picker/features/post/views/search_screen.dart';
 import 'package:food_picker/features/splash/views/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -69,6 +70,15 @@ class FoodApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) {
               return DetailScreen(model: foodStoreModel);
+            },
+          );
+        } else if (settings.name == SearchScreen.routeName) {
+          List<FoodStoreModel> foodStoreList =
+              settings.arguments as List<FoodStoreModel>;
+
+          return MaterialPageRoute(
+            builder: (context) {
+              return SearchScreen(foodStoreList: foodStoreList);
             },
           );
         }
