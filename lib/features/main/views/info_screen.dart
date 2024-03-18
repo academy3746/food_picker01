@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_picker/common/constants/gaps.dart';
 import 'package:food_picker/common/constants/sizes.dart';
+import 'package:food_picker/common/utils/app_snackbar.dart';
 import 'package:food_picker/common/utils/common_app_bar.dart';
 import 'package:food_picker/common/utils/common_text.dart';
 import 'package:food_picker/features/auth/models/member.dart';
+import 'package:food_picker/features/auth/views/login_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class InfoScreen extends StatefulWidget {
@@ -38,11 +40,38 @@ class _InfoScreenState extends State<InfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var snackbar = AppSnackbar(
+      context: context,
+      msg: '로그아웃 되었습니다!',
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CommonAppBar(
+      appBar: CommonAppBar(
         title: '프로필',
         isLeading: false,
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await _supabase.auth.signOut();
+
+              if (!context.mounted) return;
+
+              snackbar.showSnackbar(context);
+
+              Navigator.popAndPushNamed(
+                context,
+                LoginScreen.routeName,
+              );
+            },
+            child: CommonText(
+              textContent: '로그아웃',
+              textColor: Colors.grey.shade500,
+              textSize: Sizes.size20,
+              textWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: _getUserInfo(),
