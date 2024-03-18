@@ -1,4 +1,4 @@
-# Introduction (작업중)
+# Introduction
 
 <h3>맛집을 가르쳐 주겠다, 푸드피커 (토이 프로젝트)</h3>
 
@@ -7,9 +7,10 @@
 3. Server Configuration: Supabse (RDBMS)
 4. Native App Performance
 
-- In App 사진 촬영 / 갤러리: Image Picker
-- Geolocation Service: Flutter Naver Map
+- In App 사진 촬영 / 갤러리 접근: Image Picker
+- Geolocation Service: Flutter Naver Map / Geolocator
 - In App 주소 검색: Daum PostCode Search / Flutter In App WebView
+- BackEnd 연동 CRUD: Supabase Flutter
 
 # External Plugin List
 
