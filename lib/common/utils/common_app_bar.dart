@@ -8,6 +8,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.isLeading,
     this.backBtn,
     this.actions,
+    this.centerTitle,
   });
 
   final String title;
@@ -18,9 +19,12 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final List<Widget>? actions;
 
+  final bool? centerTitle;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      centerTitle: centerTitle,
       backgroundColor: Colors.white,
       toolbarHeight: Sizes.size48,
       automaticallyImplyLeading: isLeading,

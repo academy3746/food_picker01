@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_picker/common/constants/sizes.dart';
+import 'package:food_picker/common/utils/common_app_bar.dart';
 import 'package:food_picker/features/post/models/food_store.dart';
 import 'package:food_picker/features/post/views/detail_screen.dart';
-import 'package:food_picker/features/post/widgets/post_app_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LikeScreen extends StatefulWidget {
@@ -46,7 +46,8 @@ class _LikeScreenState extends State<LikeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const PostAppBar(
+      appBar: const CommonAppBar(
+        centerTitle: true,
         title: '찜한 맛집',
         isLeading: false,
       ),
