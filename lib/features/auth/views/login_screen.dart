@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return Future.value(false);
         },
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Gaps.v120,
+                    Gaps.v52,
                     const Center(
                       child: Text(
                         '푸드피커',
