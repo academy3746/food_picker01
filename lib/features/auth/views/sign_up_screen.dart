@@ -12,6 +12,7 @@ import 'package:food_picker/common/utils/common_text.dart';
 import 'package:food_picker/common/utils/image_uploader.dart';
 import 'package:food_picker/features/auth/models/member.dart';
 import 'package:food_picker/features/auth/widgets/profile.dart';
+import 'package:food_picker/features/main/views/main_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -375,7 +376,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                           snackBar.showSnackbar(context);
 
-                          Navigator.pop(context);
+                          Navigator.pushReplacementNamed(
+                            context,
+                            MainScreen.routeName,
+                          );
                         }
                       },
                     ),
