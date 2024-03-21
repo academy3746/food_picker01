@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Gaps.v52,
+                    Gaps.v72,
                     const Center(
                       child: Text(
                         '푸드피커',
